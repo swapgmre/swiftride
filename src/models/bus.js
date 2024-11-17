@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 
+
+
 const busSchema = new mongoose.Schema({
-  agencyName: {
-    type: String,
+  agency: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Agent",
     required: true,
-    trim: true,
   },
   busNumber: {
     type: String,
@@ -31,18 +33,18 @@ const busSchema = new mongoose.Schema({
   },
   departure: {
     type: String,
-    required: true,
+    // required: true,
   },
   arrival: {
     type: String,
-    required: true,
+    // required: true,
   },
   duration: {
     type: String,
   },
   boardingPoints: {
     type: [String],
-    required: true,
+    // required: true,
   },
   seatSelection: {
     type: [Number],
@@ -65,12 +67,20 @@ const busSchema = new mongoose.Schema({
     enum: ["Pending", "Approved", "Rejected"],
     default: "Pending",
   },
+  seats: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Seat"
+  }],
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active"
+  },
 },
   {
     timestamps: true,
   });
 
-const Bus = mongoose.model("Bus", busSchema);
 
-module.exports = Bus;
+module.exports = mongoose.model("Bus", busSchema);
 

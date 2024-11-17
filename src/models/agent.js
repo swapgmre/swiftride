@@ -1,7 +1,12 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const adminSchema = new mongoose.Schema({
+const agentSchema = new mongoose.Schema({
+  agencyName: {
+    type: String,
+    required: true,
+    trim: true,
+  },
   email: {
     type: String,
     required: true,
@@ -18,13 +23,24 @@ const adminSchema = new mongoose.Schema({
     required: true,
     validate(value) {
       if (!validator.isStrongPassword(value)) {
-        throw new Error(`Enter a strong password: ${value}`)
+        throw new Error(`Enter a strong password: ${value}`);
       }
     },
   },
+  address: {
+    type: String,
+  },
+  status: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
+  },
+  phoneNumber: {
+    type: Number,
+    required: true,
+  }
+}, {
+  timestamps: true,
+})
 
-}, { timestamps: true });
-
-const Admin = mongoose.model("Admin", adminSchema);
-
-module.exports = Admin;
+module.exports = mongoose.model("Agent", agentSchema);

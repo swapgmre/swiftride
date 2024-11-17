@@ -21,29 +21,44 @@ const userSchema = new mongoose.Schema({
     trim: true,
     validate(value) {
       if (!validator.isEmail(value)) {
-        throw new Error(`Invalid email address: ${vlaue}`);
+        throw new Error(`Invalid email address: ${value}`);
       }
     },
   },
-  age: {
-    type: Number,
-    min: 18,
+  password: {
+    type: String,
+    required: true,
+    validate(value) {
+      if (!validator.isStrongPassword(value)) {
+        throw new Error("Enter a strong password!")
+      }
+    }
+  },
+  dateOfBirth: {
+    type: Date,
+    validate(value) {
+      if (value <= new Date()) {
+        throw new Error("Date of birth cannot be in future")
+      }
+    }
   },
   gender: {
     type: String,
     validate(value) {
-      if (!["male", "female", "others"].inlcudes(value)) {
+      if (!["male", "female", "others"].includes(value)) {
         throw new Error("Gender data is not valid");
       }
     }
   },
-  photoUrl: {
-    type: String,
-    default: "https://smsdelhibmw.co.in/wp-content/uploads/2022/02/User-Profile-PNG.png",
-    validate(value) {
-      if (!validator.isURL(value)) {
-        throw new Error(`Invalid Photo URL: ${value}`);
-      }
-    },
-  },
-});
+  phoneNumber: {
+    type: Number,
+  }
+},
+  {
+    timestamps: true,
+  }
+);
+
+const User = mongoose.model("User", userSchema);
+
+module.exports = User;
