@@ -2,12 +2,19 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 
 const agentSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+
   agencyName: {
     type: String,
     required: true,
     trim: true,
+    unique: true,
   },
-  email: {
+  emailId: {
     type: String,
     required: true,
     unique: true,
@@ -30,14 +37,13 @@ const agentSchema = new mongoose.Schema({
   address: {
     type: String,
   },
-  status: {
-    type: String,
-    enum: ["active", "inactive"],
-    default: "active",
-  },
   phoneNumber: {
     type: Number,
     required: true,
+  },
+  isBlocked: {
+    type: Boolean,
+    default: false,
   }
 }, {
   timestamps: true,
